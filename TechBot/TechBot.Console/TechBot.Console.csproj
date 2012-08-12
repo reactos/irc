@@ -54,9 +54,9 @@
       <Project>{041B5F06-BF97-4981-B024-3A7B6DD9F6AE}</Project>
       <Name>TechBot.Commands.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TechBot.Commands.RBuild\TechBot.Commands.RBuild.csproj">
-      <Project>{D676FEDE-62DD-4B4D-94C6-308598E827F9}</Project>
-      <Name>TechBot.Commands.RBuild</Name>
+    <ProjectReference Include="..\TechBot.Commands.MSDN\TechBot.Commands.MSDN.csproj">
+      <Project>{ADBF1ED6-A586-4707-BD59-4CD53448D0FE}</Project>
+      <Name>TechBot.Commands.MSDN</Name>
     </ProjectReference>
     <ProjectReference Include="..\TechBot.IRCLibrary\TechBot.IRCLibrary.csproj">
       <Project>{D2A57931-DF04-4BC3-BD11-75DF4F3B0A88}</Project>
@@ -68,11 +68,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

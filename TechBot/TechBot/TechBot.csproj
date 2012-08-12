@@ -67,6 +67,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TechBot.Commands.Common\TechBot.Commands.Common.csproj">
+      <Project>{041B5F06-BF97-4981-B024-3A7B6DD9F6AE}</Project>
+      <Name>TechBot.Commands.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TechBot.Commands.MSDN\TechBot.Commands.MSDN.csproj">
+      <Project>{ADBF1ED6-A586-4707-BD59-4CD53448D0FE}</Project>
+      <Name>TechBot.Commands.MSDN</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TechBot.IRCLibrary\TechBot.IRCLibrary.csproj">
       <Project>{D2A57931-DF04-4BC3-BD11-75DF4F3B0A88}</Project>
       <Name>TechBot.IRCLibrary</Name>

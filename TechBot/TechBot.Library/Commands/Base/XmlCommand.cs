@@ -2,6 +2,7 @@ using System;
 using System.Xml;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace TechBot.Library
 {
@@ -12,7 +13,10 @@ namespace TechBot.Library
         public XmlCommand()
         {
             m_XmlDocument = new XmlDocument();
-            m_XmlDocument.Load(XmlFile);
+            if (Path.IsPathRooted(XmlFile))
+                m_XmlDocument.Load(XmlFile);
+            else
+                m_XmlDocument.Load(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, XmlFile));
         }
 
         public abstract string XmlFile { get; }
