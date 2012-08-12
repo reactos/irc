@@ -5,7 +5,7 @@ using TechBot.Library;
 
 namespace TechBot.Commands.Common
 {
-    [Command("winerror", Help = "!winerror <value>")]
+    [Command("winerror", Help = "!winerror <value>", Description="Get the name of the given System Error code")]
     public class WinErrorCommand : XmlLookupCommand
 	{
         public WinErrorCommand()

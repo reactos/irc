@@ -10,7 +10,7 @@ using TechBot.Library;
 
 namespace TechBot.Commands.MSDN
 {
-    [Command("api", Help = "!api <apiname>")]
+    [Command("api", Help = "!api <apiname>", Description = "Get the prototype of the given function index or name")]
 	public class ApiCommand : Command
 	{
 		private bool IsVerbose = false;

@@ -5,7 +5,7 @@ using TechBot.Library;
 
 namespace TechBot.Commands.Common
 {
-    [Command("wm" , Help = "!wm <value> or !wm <name>")]
+    [Command("wm", Help = "!wm <value> or !wm <name>", Description = "Get the name of the given windows message code")]
 	public class WMCommand : XmlCommand
 	{
         public WMCommand()

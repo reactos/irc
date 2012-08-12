@@ -5,7 +5,7 @@ using TechBot.Library;
 
 namespace TechBot.Commands.Common
 {
-    [Command("ntstatus", Help = "!ntstatus <value>")]
+    [Command("ntstatus", Help = "!ntstatus <value>", Description = "Get the name of the given NTSTATUS code")]
 	public class NtStatusCommand : XmlLookupCommand
 	{
         public NtStatusCommand()

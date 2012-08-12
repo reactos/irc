@@ -6,7 +6,7 @@ using TechBot.Library;
 
 namespace TechBot.Commands.Common
 {
-    [Command("error", Help = "!error <value>")]
+    [Command("error", Help = "!error <value>", Description = "Get the name of the given generic error code")]
 	public class ErrorCommand : Command
 	{
 		private NtStatusCommand ntStatus;

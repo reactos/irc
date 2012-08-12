@@ -5,7 +5,7 @@ using TechBot.Library;
 
 namespace TechBot.Commands.Common
 {
-    [Command("hresult", Help = "!hresult <value>")]
+    [Command("hresult", Help = "!hresult <value>", Description = "Get the name of the given HRESULT value")]
     public class HResultCommand : XmlLookupCommand
 	{
         public HResultCommand()
