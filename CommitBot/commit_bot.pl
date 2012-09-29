@@ -51,7 +51,7 @@ while (my $in = <$irc>) {
       $state = 2;
       sleep 1;
       foreach my $chan (@chans) {
-         print $irc "PRIVMSG $chan :".chr(3)."3$commit_author ".chr(3)."0 $commit_repo ".chr(2)."r$commit_rev".chr(2).":\n";
+         print $irc "PRIVMSG $chan :".chr(3)."3$commit_author".chr(15)." $commit_repo ".chr(2)."r$commit_rev".chr(2).":\n";
       }
    }
    elsif ($in =~ /^PING(.*)$/i) {
