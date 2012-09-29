@@ -19,7 +19,8 @@ my $pass = "";
 my $commit_repo = $ARGV[0];
 my $commit_rev = $ARGV[1];
 my $commit_author = $ARGV[2];
-my $commit_msg = $ARGV[3];
+my $commit_files = $ARGV[3];
+my $commit_msg = $ARGV[4];
 my $state = 0;
 my $lines = 0;
 use IO::Socket;
@@ -51,7 +52,7 @@ while (my $in = <$irc>) {
       $state = 2;
       sleep 1;
       foreach my $chan (@chans) {
-         print $irc "PRIVMSG $chan :".chr(3)."3$commit_author".chr(15)." $commit_repo ".chr(2)."r$commit_rev".chr(2).":\n";
+         print $irc "PRIVMSG $chan :".chr(3)."3$commit_author".chr(15)." $commit_repo ".chr(2)."r$commit_rev".chr(15). ($commit_files files)":\n";
       }
    }
    elsif ($in =~ /^PING(.*)$/i) {
