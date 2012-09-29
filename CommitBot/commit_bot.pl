@@ -11,6 +11,8 @@
 
 use encoding 'utf8';
 
+my $svnlook = "/usr/bin/svnlook";
+
 my $server = "irc.freenode.net";
 my $port = 6667;
 my $nick = "".int(rand(100));
@@ -18,14 +20,34 @@ my $ident = "";
 my $realname = "";
 my @chans = ("");
 my $pass = "";
-my $commit_repo = $ARGV[0];
+my $repo = $ARGV[0];
 my $commit_rev = $ARGV[1];
-my $commit_author = $ARGV[2];
-my $commit_files = $ARGV[3];
-my $commit_dirs = $ARGV[4];
-my $commit_msg = $ARGV[5];
+my $commit_repo = $ARGV[2];
 my $state = 0;
 my $lines = 0;
+my $details = 0;
+
+my $commit_author = `$svnlook author -r $commit_rev $repo`;
+my $commit_files = `$svnlook changed -r $commit_rev $repo | wc -l`;
+my $commit_dirs = `$svnlook dirs-changed -r $commit_rev $repo | wc -l`;
+my $commit_msg = `$svnlook log -r $commit_rev $repo`;
+
+chomp($commit_author);
+chomp($commit_files);
+chomp($commit_dirs);
+chomp($commit_msg);
+
+if ($commit_dirs == 1 && $commit_files <= 4) {
+   $commit_files = `$svnlook changed -r $commit_rev $repo | awk '{print \$2}' | xargs basename`;
+   $commit_dirs = `$svnlook dirs-changed -r $commit_rev $repo`;
+
+   chomp($commit_files);
+   chomp($commit_dirs);
+   $commit_files =~ s/\R/ /g;
+
+   $details = 1;
+}
+
 use IO::Socket;
 
 my $irc=IO::Socket::INET->new(
@@ -51,13 +73,13 @@ while (my $in = <$irc>) {
       $state = 1;
    }
    elsif ($in =~ /^:(.*)!.* PRIVMSG $nick :.*VERSION.*/) {
-      print $irc "NOTICE $1 :".chr(1)."VERSION RosCommit 0.1".chr(1)."\n";
+      print $irc "NOTICE $1 :".chr(1)."VERSION RosCommit 0.2".chr(1)."\n";
    }
    elsif($in =~ /JOIN/i && $state == 1) {
       $state = 2;
       sleep 1;
       my $msg;
-      if ($commit_files =~ /\D/ && $commit_dirs =~ /\D/) {
+      if ($details == 1) {
          $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." * ".chr(2)."r$commit_rev".chr(15)." $commit_dirs ($commit_files):\n";
       } else {
          $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." * ".chr(2)."r$commit_rev".chr(15)." ($commit_files file".($commit_files <= 1 ? "" : "s")." in $commit_dirs dir".($commit_dirs <= 1 ? "" : "s")."):\n";
