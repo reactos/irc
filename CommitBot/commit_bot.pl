@@ -9,6 +9,8 @@
 #          Freely inspired from http://www.javalinux.it/wordpress/2009/10/15/writing-an-irc-bot-for-svn-commit-notification/
 #
 
+use encoding 'utf8';
+
 my $server = "irc.freenode.net";
 my $port = 6667;
 my $nick = "".int(rand(100));
@@ -37,6 +39,8 @@ if ($pass !~ /^$/) {
 }
 print $irc "USER $nick $ident $ident :$realname\r\n";
 print $irc "NICK $nick\r\n";
+
+binmode($irc, ":utf8");
 
 while (my $in = <$irc>) {
    if ($in =~ /376 $nick/)
@@ -72,7 +76,7 @@ while (my $in = <$irc>) {
          my $chunk = $1;
          $commit_msg =~ s/^\R+//;
          $lines++;
-         foreach my $chan (@chans) { 
+         foreach my $chan (@chans) {
             print $irc "PRIVMSG $chan :".chr(2)."$commit_repo: ".chr(15)."$chunk\n";
          }
          select(undef, undef, undef, 0.5);
