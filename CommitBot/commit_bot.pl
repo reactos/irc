@@ -49,10 +49,10 @@ while (my $in = <$irc>) {
    }
    elsif($in =~ /JOIN/i && $state == 1) {
       $state = 2;
+      sleep 1;
       foreach my $chan (@chans) {
          print $irc "PRIVMSG $chan :".chr(3)."3$commit_author ".chr(3)."0 $commit_repo ".chr(2)."r$commit_rev".chr(2).":\n";
       }
-      select(undef, undef, undef, 0.5);
    }
    elsif ($in =~ /^PING(.*)$/i) {
       print $irc "PONG :$1\n";
@@ -69,9 +69,10 @@ while (my $in = <$irc>) {
          }
          select(undef, undef, undef, 0.5);
       }
-      sleep 2;
+      sleep 1;
       last;
    }
 }
-print $irc "QUIT :Done";
+print $irc "QUIT :Done\n";
+sleep 1;
 close($irc);
