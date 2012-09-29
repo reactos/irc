@@ -54,12 +54,12 @@ while (my $in = <$irc>) {
       sleep 1;
       my $msg;
       if ($commit_files =~ /\D/ && $commit_dirs =~ /\D/) {
-         $msg = "PRIVMSG $chan :".chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." * ".chr(2)."r$commit_rev".chr(15)." $commit_dirs ($commit_files):\n";
+         $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." * ".chr(2)."r$commit_rev".chr(15)." $commit_dirs ($commit_files):\n";
       } else {
-         $msg = "PRIVMSG $chan :".chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." * ".chr(2)."r$commit_rev".chr(15)." ($commit_files files in $commit_dirs dirs):\n";
+         $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." * ".chr(2)."r$commit_rev".chr(15)." ($commit_files files in $commit_dirs dirs):\n";
       }
       foreach my $chan (@chans) {
-         print $irc $msg;
+         print $irc "PRIVMSG $chan :$msg";
       }
    }
    elsif ($in =~ /^PING(.*)$/i) {
