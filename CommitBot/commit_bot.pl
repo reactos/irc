@@ -53,7 +53,7 @@ while (my $in = <$irc>) {
       $state = 2;
       sleep 1;
       foreach my $chan (@chans) {
-         print $irc "PRIVMSG $chan :".chr(3)."3$commit_author".chr(15)." $commit_repo ".chr(2)."r$commit_rev".chr(15). ($commit_files files in $commit_dirs dirs)":\n";
+         print $irc "PRIVMSG $chan :".chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." * ".chr(2)."r$commit_rev".chr(15). ($commit_files files in $commit_dirs dirs)":\n";
       }
    }
    elsif ($in =~ /^PING(.*)$/i) {
@@ -67,7 +67,7 @@ while (my $in = <$irc>) {
          $commit_msg =~ s/^\R+//;
          $lines++;
          foreach my $chan (@chans) { 
-            print $irc "PRIVMSG $chan :$chunk\n";
+            print $irc "PRIVMSG $chan :".chr(2)."$commit_repo: ".chr(15)."$chunk\n";
          }
          select(undef, undef, undef, 0.5);
       }
