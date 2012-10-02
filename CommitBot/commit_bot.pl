@@ -31,6 +31,18 @@ my $commit_author = `$svnlook author -r $commit_rev $repo`;
 my $commit_files = `$svnlook changed -r $commit_rev $repo | wc -l`;
 my $commit_dirs = `$svnlook dirs-changed -r $commit_rev $repo | wc -l`;
 my $commit_msg = `$svnlook log -r $commit_rev $repo`;
+my $commit_branch = "*";
+
+my @dirs_list = split(/\R/, `$svnlook dirs-changed -r $commit_rev $repo`);
+my $commit_common = make_min_path(@dirs_list);
+
+if ($commit_common =~ /^branches\//) {
+   my $next = index $commit_common, "/", 9;
+   $commit_branch = chr(3)."4".substr($commit_common, 9, $next - 9).chr(15);
+} elsif ($commit_common =~ /^tags\//) {
+   my $next = index $commit_common, "/", 5;
+   $commit_branch = chr(3)."4".substr($commit_common, 5, $next - 5).chr(15);
+}
 
 chomp($commit_author);
 chomp($commit_files);
@@ -80,9 +92,9 @@ while (my $in = <$irc>) {
       sleep 1;
       my $msg;
       if ($details == 1) {
-         $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." * ".chr(2)."r$commit_rev".chr(15)." $commit_dirs ($commit_files):\n";
+         $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." $commit_branch ".chr(2)."r$commit_rev".chr(15)." $commit_dirs ($commit_files):\n";
       } else {
-         $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." * ".chr(2)."r$commit_rev".chr(15)." ($commit_files file".($commit_files <= 1 ? "" : "s")." in $commit_dirs dir".($commit_dirs <= 1 ? "" : "s")."):\n";
+         $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." $commit_branch ".chr(2)."r$commit_rev".chr(15)." ($commit_files file".($commit_files <= 1 ? "" : "s")." in $commit_dirs dir".($commit_dirs <= 1 ? "" : "s")."):\n";
       }
       foreach my $chan (@chans) {
          print $irc "PRIVMSG $chan :$msg";
@@ -110,3 +122,32 @@ while (my $in = <$irc>) {
 print $irc "QUIT :Done\n";
 sleep 1;
 close($irc);
+
+sub min {
+   my $a = shift(@_);
+   my $b = shift(@_);
+   return ($a > $b) ? $b : $a;
+}
+
+sub make_min_path {
+   my @paths = @_;
+   my $common = $paths[0];
+   my $last = 0;
+
+   foreach my $path (@paths) {
+      my $new_length = 0;
+      my $min_length = min(length($path), length($common));
+      my $pos = 0;
+
+      while ($pos < $min_length) {
+         last if substr($common, $pos, 1) ne substr($path, $pos, 1);
+         $last = ($pos + 1) if substr($common, $pos, 1) eq "/";
+         $pos++;
+      }
+      $common = substr($common, 0, $pos);
+   }
+
+   $common = substr($common, 0, $last);
+
+   return $common;
+}
