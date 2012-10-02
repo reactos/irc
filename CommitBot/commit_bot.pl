@@ -53,15 +53,21 @@ chomp($commit_files);
 chomp($commit_dirs);
 chomp($commit_msg);
 
-if ($commit_dirs == 1 && $commit_files <= 4) {
-   $commit_files = `$svnlook changed -r $commit_rev $repo | awk '{print \$2}' | xargs basename`;
-   $commit_dirs = `$svnlook dirs-changed -r $commit_rev $repo`;
+if ($commit_files <= 4) {
+   my $fc = 0;
+   $commit_files = "";
+   my @files_list = split(/\R/,  `$svnlook changed -r $commit_rev $repo | awk '{print \$2}'`);
+   foreach $file (@files_list) {
+      my $pos = index $file, $commit_common;
+      $commit_files .= ($fc > 0 ? " " : "") . substr($file, $pos + length($commit_common));
+      $fc++;
+   }
 
-   chomp($commit_files);
-   chomp($commit_dirs);
-   $commit_files =~ s/\R/ /g;
-
-   $details = 1;
+   if (length($commit_files) > 400) {
+      $commit_files = $fc;
+   } else {
+      $details = 1;
+   }
 }
 
 use IO::Socket;
@@ -96,7 +102,7 @@ while (my $in = <$irc>) {
       sleep 1;
       my $msg;
       if ($details == 1) {
-         $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." $commit_branch ".chr(2)."r$commit_rev".chr(15)." $commit_dirs ($commit_files):\n";
+         $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." $commit_branch ".chr(2)."r$commit_rev".chr(15)." $commit_common ($commit_files):\n";
       } else {
          $msg = chr(2)."$commit_repo: ".chr(15).chr(3)."3$commit_author".chr(15)." $commit_branch ".chr(2)."r$commit_rev".chr(15)." $commit_common ($commit_files file".($commit_files <= 1 ? "" : "s")." in $commit_dirs dir".($commit_dirs <= 1 ? "" : "s")."):\n";
       }
