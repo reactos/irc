@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # File:    commit_bot.pl
 # Author:  Pierre Schweitzer <pierre@reactos.org>
@@ -8,7 +8,10 @@
 #          It has been specifically designed for Freenode network
 #
 
+use warnings;
+use strict;
 use encoding 'utf8';
+use Time::HiRes;
 
 # Env
 my $svnlook = "/usr/bin/svnlook";
@@ -54,7 +57,7 @@ if ($commit_files <= 4) {
    # Get files list
    my @files_list = split(/\R/,  `$svnlook changed -r $commit_rev $repo | awk '{print \$2}'`);
    # Delete the common path in them
-   foreach $file (@files_list) {
+   foreach my $file (@files_list) {
       $commit_files .= ($fc > 0 ? " " : "") . substr($file, $commit_common_len);
       $fc++;
    }
@@ -104,7 +107,7 @@ print $irc "USER $nick $ident $ident :$realname\r\n";
 print $irc "NICK $nick\r\n";
 
 # Switch to Unicode
-binmode($irc, ":utf8");
+binmode($irc, ":encoding(UTF-8)");
 
 while (my $in = <$irc>) {
    # On end of MOTD, join chans
@@ -149,7 +152,7 @@ while (my $in = <$irc>) {
          foreach my $chan (@chans) {
             print $irc "PRIVMSG $chan :".chr(2)."$commit_repo: ".chr(15)."$chunk\n";
          }
-         select(undef, undef, undef, 0.5);
+         sleep(0.5);
       }
       sleep 1;
       last;
