@@ -55,9 +55,10 @@ if ($commit_files <= 4) {
    my $commit_common_len = length($commit_common);
    $commit_files = "";
    # Get files list
-   my @files_list = split(/\R/,  `$svnlook changed -r $commit_rev $repo | awk '{print \$2}'`);
+   my @files_list = split(/\R/,  `$svnlook changed -r $commit_rev $repo | cut -d" " --complement -f1`);
    # Delete the common path in them
    foreach my $file (@files_list) {
+      $file =~ s/^\s+//;
       $commit_files .= ($fc > 0 ? " " : "") . substr($file, $commit_common_len);
       $fc++;
    }
