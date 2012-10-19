@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # File:    commit_bot.pl
 # Author:  Pierre Schweitzer <pierre@reactos.org>
@@ -73,13 +73,27 @@ if ($commit_files <= 4) {
 
 # Now, handle specific path and remove them
 if ($commit_common =~ /^branches\//) {
-   my $next = index $commit_common, "/", 9;
-   $commit_branch = chr(3)."7".substr($commit_common, 9, $next - 9).chr(15);
-   $commit_common = substr($commit_common, $next);
+   # Handle branch creation
+   if ($commit_common eq "branches/" && $commit_dirs == 1) {
+      $commit_branch = chr(3)."7".substr($commit_files, 0, 9).chr(15);
+      $commit_common = "/";
+      $commit_files = "/";
+   } else {
+      my $next = index $commit_common, "/", 9;
+      $commit_branch = chr(3)."7".substr($commit_common, 9, $next - 9).chr(15);
+      $commit_common = substr($commit_common, $next);
+   }
 } elsif ($commit_common =~ /^tags\//) {
-   my $next = index $commit_common, "/", 5;
-   $commit_branch = chr(3)."7".substr($commit_common, 5, $next - 5).chr(15);
-   $commit_common = substr($commit_common, $next);
+   # Handle tag creation
+   if ($commit_common eq "tags/" && $commit_dirs == 1) {
+      $commit_branch = chr(3)."7".substr($commit_files, 0, 5).chr(15);
+      $commit_common = "/";
+      $commit_files = "/";
+   } else {
+      my $next = index $commit_common, "/", 5;
+      $commit_branch = chr(3)."7".substr($commit_common, 5, $next - 5).chr(15);
+      $commit_common = substr($commit_common, $next);
+   }
 } elsif ($commit_common =~ /^trunk\//) {
    $commit_common =~ s/^.{6}//;
    # Also color first dir, as CIA did
