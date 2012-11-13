@@ -65,17 +65,16 @@ namespace TechBot.Library
             base.Run();
 
             m_IrcClient = new IrcClient();
-            m_IrcClient.Encoding = Encoding.GetEncoding("iso-8859-1");
-            m_IrcClient.OnConnect += new OnConnectHandler(m_IrcClient_OnConnect);
-            m_IrcClient.OnConnectionLost += new OnConnectionLostHandler(m_IrcClient_OnConnectionLost);
-            m_IrcClient.OnDisconnect += new OnDisconnectHandler(m_IrcClient_OnDisconnect);
-            m_IrcClient.MessageReceived += new MessageReceivedHandler(client_MessageReceived);
-            m_IrcClient.ChannelUserDatabaseChanged += new ChannelUserDatabaseChangedHandler(client_ChannelUserDatabaseChanged);
-
+            m_IrcClient.Encoding = Encoding.GetEncoding("iso-8859-1");             
+            m_IrcClient.OnConnect += new EventHandler(m_IrcClient_OnConnect);
+            m_IrcClient.OnConnectionLost += new EventHandler(m_IrcClient_OnConnectionLost);
+            m_IrcClient.OnDisconnect += new EventHandler(m_IrcClient_OnDisconnect);
+            m_IrcClient.MessageReceived += new EventHandler<IrcMessageReceivedEventArgs>(client_MessageReceived);
+            m_IrcClient.ChannelUserDatabaseChanged +=new EventHandler<ChannelUserDatabaseChangedEventArgs>(client_ChannelUserDatabaseChanged);
             Connect();
         }
 
-        void m_IrcClient_OnConnect()
+        void m_IrcClient_OnConnect(object sender, EventArgs e)
         {
             Console.WriteLine("Connected...");
         }
@@ -105,15 +104,15 @@ namespace TechBot.Library
             }
 
             PartChannels();
-            m_IrcClient.Diconnect();
+            m_IrcClient.Disconnect();
         }
 
-        void m_IrcClient_OnDisconnect()
+        void m_IrcClient_OnDisconnect(object sender, EventArgs e)
         {
             Console.WriteLine("Disconnected...");
         }
 
-        void m_IrcClient_OnConnectionLost()
+        void m_IrcClient_OnConnectionLost(object sender, EventArgs e)
         {
             //Dispose old connection
             Disconnect();
@@ -129,7 +128,7 @@ namespace TechBot.Library
         {
             try
             {
-                m_IrcClient.Diconnect();
+                m_IrcClient.Disconnect();
             }
             catch (Exception)
             {
@@ -269,8 +268,10 @@ namespace TechBot.Library
 			return false;
 		}
 				
-		private void client_MessageReceived(IrcMessage message)
+		private void client_MessageReceived(object sender, IrcMessageReceivedEventArgs e)
 		{
+            IrcMessage message = e.Message;
+
 			try
 			{
 				if (message.Command != null &&
@@ -305,8 +306,9 @@ namespace TechBot.Library
 			}
 		}
 		
-		private void client_ChannelUserDatabaseChanged(IrcChannel channel)
-		{
+		private void client_ChannelUserDatabaseChanged(object sender, ChannelUserDatabaseChangedEventArgs e)
+        {
+            IrcChannel channel = e.Channel;
 		}
 	}
 }

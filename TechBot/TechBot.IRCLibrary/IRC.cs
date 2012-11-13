@@ -7,6 +7,9 @@ namespace TechBot.IRCLibrary
 	/// </summary>
 	public class IRC
 	{
+        private IRC()
+        {
+        }
 		#region IRC commands
 
 		public const string JOIN = "JOIN";
@@ -25,6 +28,5 @@ namespace TechBot.IRCLibrary
 		public const string ERR_NICKNAMEINUSE = "433";
 
 		#endregion
-
 	}
 }

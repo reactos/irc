@@ -7,18 +7,33 @@ using System.Net.Sockets;
 namespace TechBot.IRCLibrary
 {
 	/// <summary>
-	/// Delegate that delivers an IRC message.
+    /// EventArgs that delivers an IRC message.
 	/// </summary>
-	public delegate void MessageReceivedHandler(IrcMessage message);
+    public class IrcMessageReceivedEventArgs : EventArgs
+    {
+        IrcMessage m_message;
+        public IrcMessage Message
+        { get { return m_message; } set { m_message = value; } }
+        public IrcMessageReceivedEventArgs(IrcMessage item)
+        {
+            Message = item;
+        }
+    }
+
 
 	/// <summary>
-	/// Delegate that notifies if the user database for a channel has changed.
+	/// EventArgs that notifies if the user database for a channel has changed.
 	/// </summary>
-	public delegate void ChannelUserDatabaseChangedHandler(IrcChannel channel);
-
-    public delegate void OnConnectHandler ();
-    public delegate void OnDisconnectHandler();
-    public delegate void OnConnectionLostHandler();
+    public class ChannelUserDatabaseChangedEventArgs : EventArgs
+    {
+        IrcChannel m_channel;
+        public IrcChannel Channel
+        { get { return m_channel; } set { m_channel = value; } }
+        public ChannelUserDatabaseChangedEventArgs(IrcChannel item)
+        {
+            Channel = item;
+        }
+    }
 
 	/// <summary>
 	/// An IRC client.
@@ -45,8 +60,8 @@ namespace TechBot.IRCLibrary
 			/// <summary>
 			/// Handler to call when command is received.
 			/// </summary>
-			private MessageReceivedHandler handler;
-			public MessageReceivedHandler Handler
+            private EventHandler<IrcMessageReceivedEventArgs> handler;
+            public EventHandler<IrcMessageReceivedEventArgs> Handler
 			{
 				get
 				{
@@ -60,7 +75,7 @@ namespace TechBot.IRCLibrary
 			/// <param name="command">IRC command to monitor.</param>
 			/// <param name="handler">Handler to call when command is received.</param>
 			public IrcCommandEventRegistration(string command,
-				MessageReceivedHandler handler)
+                EventHandler<IrcMessageReceivedEventArgs> handler)
 			{
 				this.command = command;
 				this.handler = handler;
@@ -206,13 +221,13 @@ namespace TechBot.IRCLibrary
 
 		#region Public events
 
-		public event MessageReceivedHandler MessageReceived;
+        public event EventHandler<IrcMessageReceivedEventArgs> MessageReceived;
 
-		public event ChannelUserDatabaseChangedHandler ChannelUserDatabaseChanged;
+        public event EventHandler<ChannelUserDatabaseChangedEventArgs> ChannelUserDatabaseChanged;
 
-        public event OnConnectHandler OnConnect;
-        public event OnConnectionLostHandler OnConnectionLost;
-        public event OnDisconnectHandler OnDisconnect;
+        public event EventHandler OnConnect;
+        public event EventHandler OnConnectionLost;
+        public event EventHandler OnDisconnect;
 
 		#endregion
 
@@ -268,12 +283,12 @@ namespace TechBot.IRCLibrary
 			{
 				if (message.Command.ToLower().Equals(icre.Command.ToLower()))
 				{
-					icre.Handler(message);
+					icre.Handler(this, new IrcMessageReceivedEventArgs(message));
 				}
 			}
 			if (MessageReceived != null)
 			{
-				MessageReceived(message);
+				MessageReceived(this, new IrcMessageReceivedEventArgs(message));
 			}
 		}
 
@@ -285,7 +300,7 @@ namespace TechBot.IRCLibrary
 		{
 			if (ChannelUserDatabaseChanged != null)
 			{
-				ChannelUserDatabaseChanged(channel);
+				ChannelUserDatabaseChanged(this, new ChannelUserDatabaseChangedEventArgs(channel));
 			}
 		}
 
@@ -324,7 +339,8 @@ namespace TechBot.IRCLibrary
                         messageStream.Write(Encoding.GetString(stateObject.Buffer, 0, bytesReceived));
                         while (messageStream.DataAvailable)
                         {
-                            OnMessageReceived(new IrcMessage(messageStream.Read()));
+                            string message = messageStream.Read();
+                            OnMessageReceived(new IrcMessage(message));
                         }
                     }
                 }
@@ -334,17 +350,17 @@ namespace TechBot.IRCLibrary
             catch (SocketException)
             {
                 if (OnConnectionLost != null)
-                    OnConnectionLost();
+                    OnConnectionLost(this, EventArgs.Empty);
             }
             catch (IOException)
             {
                 if (OnConnectionLost != null)
-                    OnConnectionLost();
+                    OnConnectionLost(this, EventArgs.Empty);
             }
             catch (Exception)
             {
                 if (OnConnectionLost != null)
-                    OnConnectionLost();
+                    OnConnectionLost(this, EventArgs.Empty);
             } 
 		}
 
@@ -369,8 +385,9 @@ namespace TechBot.IRCLibrary
 		/// Send a PONG message when a PING message is received.
 		/// </summary>
 		/// <param name="message">Received IRC message.</param>
-		private void PingMessageReceived(IrcMessage message)
+		private void PingMessageReceived(object sender, IrcMessageReceivedEventArgs e)
 		{
+            IrcMessage message = e.Message;
 			SendMessage(new IrcMessage(IRC.PONG, message.Parameters));
 			firstPingReceived = true;
 		}
@@ -379,9 +396,10 @@ namespace TechBot.IRCLibrary
 		/// Send a PONG message when a PING message is received.
 		/// </summary>
 		/// <param name="message">Received IRC message.</param>
-		private void NoticeMessageReceived(IrcMessage message)
-		{
-			if (awaitingGhostDeath)
+        private void NoticeMessageReceived(object sender, IrcMessageReceivedEventArgs e)
+        {
+            IrcMessage message = e.Message;
+            if (awaitingGhostDeath)
 			{
 				string str = string.Format("{0} has been ghosted", reqNickname);
 				if (message.Parameters.Contains(str))
@@ -397,9 +415,10 @@ namespace TechBot.IRCLibrary
 		/// Process RPL_NAMREPLY message.
 		/// </summary>
 		/// <param name="message">Received IRC message.</param>
-		private void RPL_NAMREPLYMessageReceived(IrcMessage message)
-		{
-			try
+        private void RPL_NAMREPLYMessageReceived(object sender, IrcMessageReceivedEventArgs e)
+        {
+            IrcMessage message = e.Message;
+            try
 			{
 				// :Oslo2.NO.EU.undernet.org 353 E101 = #E101 :E101 KongFu_uK @Exception
 				/* "( "=" / "*" / "@" ) <channel>
@@ -476,8 +495,9 @@ namespace TechBot.IRCLibrary
 		/// Process RPL_ENDOFNAMES message.
 		/// </summary>
 		/// <param name="message">Received IRC message.</param>
-		private void RPL_ENDOFNAMESMessageReceived(IrcMessage message)
-		{
+        private void RPL_ENDOFNAMESMessageReceived(object sender, IrcMessageReceivedEventArgs e)
+        {
+            IrcMessage message = e.Message;
 			try
 			{
 				/* <channel> :End of NAMES list */
@@ -508,8 +528,9 @@ namespace TechBot.IRCLibrary
 		/// Process ERR_NICKNAMEINUSE message.
 		/// </summary>
 		/// <param name="message">Received IRC message.</param>
-		private void ERR_NICKNAMEINUSEMessageReceived(IrcMessage message)
-		{
+        private void ERR_NICKNAMEINUSEMessageReceived(object sender, IrcMessageReceivedEventArgs e)
+        {
+            IrcMessage message = e.Message;
 			try
 			{
 				if (message.Parameters == null)
@@ -556,24 +577,26 @@ namespace TechBot.IRCLibrary
 					throw new Exception("Cannot read and write from socket.");
 				}
 				/* Install PING message handler */
-				MonitorCommand(IRC.PING, new MessageReceivedHandler(PingMessageReceived));
+                MonitorCommand(IRC.PING, new EventHandler<IrcMessageReceivedEventArgs>(PingMessageReceived));
 				/* Install NOTICE message handler */
-				MonitorCommand(IRC.NOTICE, new MessageReceivedHandler(NoticeMessageReceived));
+                MonitorCommand(IRC.NOTICE, new EventHandler<IrcMessageReceivedEventArgs>(NoticeMessageReceived));
 				/* Install RPL_NAMREPLY message handler */
-				MonitorCommand(IRC.RPL_NAMREPLY, new MessageReceivedHandler(RPL_NAMREPLYMessageReceived));
+                MonitorCommand(IRC.RPL_NAMREPLY, new EventHandler<IrcMessageReceivedEventArgs>(RPL_NAMREPLYMessageReceived));
 				/* Install RPL_ENDOFNAMES message handler */
-				MonitorCommand(IRC.RPL_ENDOFNAMES, new MessageReceivedHandler(RPL_ENDOFNAMESMessageReceived));
+                MonitorCommand(IRC.RPL_ENDOFNAMES, new EventHandler<IrcMessageReceivedEventArgs>(RPL_ENDOFNAMESMessageReceived));
 				/* Install ERR_NICKNAMEINUSE message handler */
-				MonitorCommand(IRC.ERR_NICKNAMEINUSE, new MessageReceivedHandler(ERR_NICKNAMEINUSEMessageReceived));
+                MonitorCommand(IRC.ERR_NICKNAMEINUSE, new EventHandler<IrcMessageReceivedEventArgs>(ERR_NICKNAMEINUSEMessageReceived));
 				/* Start receiving data */
 				Receive();
+                if (OnConnect != null)
+                    OnConnect(this, EventArgs.Empty);
 			}
 		}
 
 		/// <summary>
 		/// Disconnect from IRC server.
 		/// </summary>
-		public void Diconnect()
+		public void Disconnect()
 		{
 			if (!connected)
 			{
@@ -586,7 +609,7 @@ namespace TechBot.IRCLibrary
 				tcpClient = null;
 
                 if (OnDisconnect != null)
-                    OnDisconnect();
+                    OnDisconnect(this, EventArgs.Empty);
 			}
 		}
 
@@ -615,17 +638,17 @@ namespace TechBot.IRCLibrary
             catch (SocketException)
             {
                 if (OnConnectionLost != null)
-                    OnConnectionLost();
+                    OnConnectionLost(this, EventArgs.Empty);
             }
             catch (IOException)
             {
                 if (OnConnectionLost != null)
-                    OnConnectionLost();
+                    OnConnectionLost(this, EventArgs.Empty);
             }
             catch (Exception)
             {
                 if (OnConnectionLost != null)
-                    OnConnectionLost();
+                    OnConnectionLost(this, EventArgs.Empty);
             } 
 		}
 
@@ -634,7 +657,7 @@ namespace TechBot.IRCLibrary
 		/// </summary>
 		/// <param name="command">IRC command to monitor.</param>
 		/// <param name="handler">Handler to call when command is received.</param>
-		public void MonitorCommand(string command, MessageReceivedHandler handler)
+        public void MonitorCommand(string command, EventHandler<IrcMessageReceivedEventArgs> handler)
 		{
 			if (command == null)
 			{
