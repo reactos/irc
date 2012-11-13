@@ -13,9 +13,9 @@ namespace TechBot.Commands.Common
         {
         }
 
-        protected override string BugUrl
+        protected override Uri BugUrl
         {
-            get { return "http://www.reactos.org/bugzilla/show_bug.cgi?id={0}"; }
+            get { return new Uri("http://www.reactos.org/bugzilla/show_bug.cgi?id={0}"); }
         }
     }
 }

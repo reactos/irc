@@ -28,7 +28,7 @@ namespace TechBot.Commands.Common
             {
                 try
                 {
-                    Say(BugUrl, Int32.Parse(BugID));
+                    Say(BugUrl.ToString(), Int32.Parse(BugID));
                 }
                 catch (Exception)
                 {
@@ -37,6 +37,6 @@ namespace TechBot.Commands.Common
             }
         }
 
-        protected abstract string BugUrl { get; }
+        protected abstract Uri BugUrl { get; }
 	}
 }

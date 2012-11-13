@@ -10,7 +10,7 @@ namespace TechBot.Library
     {
         protected XmlDocument m_XmlDocument;
 
-        public XmlCommand()
+        protected XmlCommand()
         {
             m_XmlDocument = new XmlDocument();
             if (Path.IsPathRooted(XmlFile))

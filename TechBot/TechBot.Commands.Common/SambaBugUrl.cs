@@ -13,9 +13,9 @@ namespace TechBot.Commands.Common
         {
         }
 
-        protected override string BugUrl
+        protected override Uri BugUrl
         {
-            get { return "https://bugzilla.samba.org/show_bug.cgi?id={0}"; }
+            get { return new Uri("https://bugzilla.samba.org/show_bug.cgi?id={0}"); }
         }
     }
 }
