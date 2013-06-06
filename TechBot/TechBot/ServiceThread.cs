@@ -8,7 +8,7 @@ namespace TechBot
 	public class ServiceThread
 	{
 		private EventLog m_EventLog;
-		
+        private IrcTechBotService ircService;
 		public ServiceThread(EventLog eventLog)
 		{
 			m_EventLog = eventLog;
@@ -18,7 +18,7 @@ namespace TechBot
         {
             System.Console.WriteLine("TechBot irc service...");
 
-            IrcTechBotService ircService = new IrcTechBotService(
+            ircService = new IrcTechBotService(
                 Settings.Default.IRCServerHostName,
                 Settings.Default.IRCServerHostPort,
                 Settings.Default.IRCChannelNames,
@@ -39,5 +39,9 @@ namespace TechBot
 				m_EventLog.WriteEntry(String.Format("Ex. {0}", ex));
 			}
 		}
+        public void Stop()
+        {
+            ircService.Stop();
+        }
 	}
 }

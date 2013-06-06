@@ -14,7 +14,7 @@ namespace TechBot
 		private Thread thread;
 		private ServiceThread threadWorker;
 		
-		public TechBotService()
+		private TechBotService()
 		{
 			InitializeComponents();
 		}
@@ -67,8 +67,7 @@ namespace TechBot
 		{
 			try
 			{
-				thread.Abort();
-				thread.Join();
+                threadWorker.Stop();
 				thread = null;
 				threadWorker = null;
 				EventLog.WriteEntry(String.Format("TechBot service is stopped."));

@@ -24,6 +24,7 @@ namespace TechBot.Console
             }
 
             m_TechBot.Run();
+            System.Console.ReadLine();
         }
 	}
 }

@@ -40,7 +40,6 @@ namespace TechBot.Library
 		private string password;
 		private IrcClient m_IrcClient;
 		private ArrayList channels = new ArrayList();
-		private bool isStopped = false;
 
         public IrcTechBotService(string hostname,
 		                  int port,
@@ -108,14 +107,6 @@ namespace TechBot.Library
             }
 
             JoinChannels();
-
-            while (!isStopped)
-            {
-                Thread.Sleep(1000);
-            }
-
-            PartChannels();
-            m_IrcClient.Disconnect();
         }
 
         void m_IrcClient_OnDisconnect(object sender, EventArgs e)
@@ -149,7 +140,8 @@ namespace TechBot.Library
 
 		public void Stop()
 		{
-			isStopped = true;
+            PartChannels();
+            m_IrcClient.Disconnect();
 		}
 
 		private void JoinChannels()
