@@ -210,7 +210,7 @@ namespace TechBot.IRCLibrary
 		private System.Text.Encoding encoding = System.Text.Encoding.UTF8;
 		private TcpClient tcpClient;
 		private NetworkStream networkStream;
-		private bool connected = false;
+		private bool m_connected = false;
 		private LineBuffer messageStream;
 		private ArrayList ircCommandEventRegistrations = new ArrayList();
 		private ArrayList channels = new ArrayList();
@@ -269,6 +269,14 @@ namespace TechBot.IRCLibrary
 				return curNickname;
 			}
 		}
+
+        /// <summary>
+        /// Gets the client connection status.
+        /// </summary>
+        public bool Connected
+        {
+            get { return m_connected; }
+        }
 		#endregion
 
 		#region Private methods
@@ -318,7 +326,8 @@ namespace TechBot.IRCLibrary
 			}
 			else
 			{
-				throw new Exception("Socket is closed.");
+                SocketException ex = (SocketException)new System.ComponentModel.Win32Exception("Cannot read and write from socket.");
+                throw ex;
 			}
 		}
 
@@ -559,7 +568,7 @@ namespace TechBot.IRCLibrary
 		/// <param name="port">Port of IRC server.</param>
 		public void Connect(string server, int port)
 		{
-			if (connected)
+			if (m_connected)
 			{
 				throw new AlreadyConnectedException();
 			}
@@ -571,10 +580,11 @@ namespace TechBot.IRCLibrary
 				tcpClient.NoDelay = true;
 				tcpClient.LingerState = new LingerOption(false, 0);
 				networkStream = tcpClient.GetStream();
-				connected = networkStream.CanRead && networkStream.CanWrite;
-				if (!connected)
+				m_connected = networkStream.CanRead && networkStream.CanWrite;
+				if (!m_connected)
 				{
-					throw new Exception("Cannot read and write from socket.");
+                    SocketException ex = (SocketException)new System.ComponentModel.Win32Exception("Cannot read and write from socket.");
+                    throw ex;
 				}
 				/* Install PING message handler */
                 MonitorCommand(IRC.PING, new EventHandler<IrcMessageReceivedEventArgs>(PingMessageReceived));
@@ -598,13 +608,13 @@ namespace TechBot.IRCLibrary
 		/// </summary>
 		public void Disconnect()
 		{
-			if (!connected)
+			if (!m_connected)
 			{
 				throw new NotConnectedException();
 			}
 			else
 			{
-				connected = false;
+				m_connected = false;
 				tcpClient.Close();
 				tcpClient = null;
 
@@ -621,7 +631,7 @@ namespace TechBot.IRCLibrary
 		{
             try
             {
-                if (!connected)
+                if (!m_connected)
                 {
                     throw new NotConnectedException();
                 }

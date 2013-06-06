@@ -84,7 +84,18 @@ namespace TechBot.Library
             Console.WriteLine("Connecting to {0} port {1}",
                                                    hostname,
                                                    port);
-            m_IrcClient.Connect(hostname, port);
+            while (!m_IrcClient.Connected)
+            {
+                try
+                {
+                    m_IrcClient.Connect(hostname, port);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Thread.Sleep(10000);
+                }
+            }            
             
             m_IrcClient.Register(botname, password, null);
             Console.WriteLine("Registered as {0}...", m_IrcClient.Nickname);
