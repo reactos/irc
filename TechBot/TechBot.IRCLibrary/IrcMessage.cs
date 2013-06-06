@@ -473,7 +473,7 @@ namespace TechBot.IRCLibrary
 				return false;
 			}
 			/* First character must be a letter. */
-			if (!Char.IsLetter(nickname[0]))
+			if (!Char.IsLetter(nickname[0])&&!IsSpecial(nickname[0]))
 			{
 				return false;
 			}
