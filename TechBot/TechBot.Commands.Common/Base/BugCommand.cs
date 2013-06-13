@@ -6,8 +6,6 @@ namespace TechBot.Commands.Common
 {
 	public abstract class BugCommand : Command
 	{
-//        private string m_BugID = null;
-
 		public BugCommand()
 		{
 		}
@@ -22,18 +20,11 @@ namespace TechBot.Commands.Common
         {
             if (string.IsNullOrEmpty(BugID))
             {
-                Say("Please provide a valid bug number.");
+                Say("Please provide a bug number.");
             }
             else
             {
-                try
-                {
-                    Say(BugUrl.ToString(), Int32.Parse(BugID));
-                }
-                catch (Exception)
-                {
-                    Say("{0} is not a valid bug number.", BugID);
-                }
+                Say(BugUrl.ToString(), BugID);
             }
         }
 

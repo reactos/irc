@@ -6,7 +6,7 @@ using TechBot.Library;
 
 namespace TechBot.Commands.Common
 {
-    [Command("rosbug", Help = "!rosbug <number>", Description = "Will give you a link to the reqested ReactOS bug")]
+    [Command("jira", Help = "!jira <number>", Description = "Will give you a link to the requested ReactOS bug")]
     class ReactOSBugUrl : BugCommand
     {
         public ReactOSBugUrl()
@@ -15,7 +15,7 @@ namespace TechBot.Commands.Common
 
         protected override Uri BugUrl
         {
-            get { return new Uri("http://www.reactos.org/bugzilla/show_bug.cgi?id={0}"); }
+            get { return new Uri("http://jira.reactos.org/browse/{0}"); }
         }
     }
 }
