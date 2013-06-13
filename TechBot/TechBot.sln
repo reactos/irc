@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechBot", "TechBot\TechBot.csproj", "{106F437D-424B-4758-A69C-862D08D26F3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compression", "Compression\Compression.csproj", "{E32307F1-623A-4E62-826F-56CDD4B23A54}"
