@@ -246,7 +246,7 @@ namespace TechBot.Library
 				{
 					foreach (IrcChannel channel in channels)
 					{
-						if (String.Compare(channel.Name, channelName, true) == 0)
+						if (String.Equals(channel.Name, channelName,StringComparison.OrdinalIgnoreCase))
 						{
 							context = new ChannelMessageContext(channel);
 							return true;
