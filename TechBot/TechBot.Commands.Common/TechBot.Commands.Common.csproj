@@ -57,6 +57,7 @@
     <Compile Include="WineBugUrl.cs" />
     <Compile Include="WinerrorCommand.cs" />
     <Compile Include="WMCommand.cs" />
+    <Compile Include="BugcheckCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TechBot.Library\TechBot.Library.csproj">
