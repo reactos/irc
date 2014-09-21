@@ -468,6 +468,8 @@ namespace TechBot.IRCLibrary
 						parameters[2].Substring(1)));
 					return;
 				}
+				else
+					channel.Type = type;
 				string nickname = parameters[3];
 				if (nickname[0] != ':')
 				{
