@@ -70,6 +70,10 @@ namespace TechBot.IRCLibrary
 			{
 				return type;
 			}
+            set
+            {
+                type = value;
+            }
 		}
 
 		/// <summary>
