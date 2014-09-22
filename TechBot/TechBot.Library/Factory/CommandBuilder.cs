@@ -11,6 +11,8 @@ namespace TechBot.Library
         private string m_CommandName;
         private string m_CommandHelp;
         private string m_CommandDesc;
+        private Command m_Instance;
+        object Lock = new object();
 
         public CommandBuilder(Type commandType)
         {
@@ -46,7 +48,17 @@ namespace TechBot.Library
 
         public Command CreateCommand()
         {
-            return (Command)Type.Assembly.CreateInstance(Type.FullName, true);
+            // Create command instance and keep it for future uses.
+            lock (Lock)
+            {
+                if (m_Instance != null)
+                    return m_Instance;
+                else
+                {
+                    m_Instance = (Command)Type.Assembly.CreateInstance(Type.FullName, true);
+                    return m_Instance;
+                }
+            }
         }
     }
 }
