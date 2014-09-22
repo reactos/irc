@@ -81,6 +81,11 @@ namespace TechBot.Commands.Common
 			string errorText = Parameters;
 
 		retry:
+            if(Parameters.ToLower().Contains("deadbeef"))
+            {
+                Say("You have seen too much Wine code.");
+                return;
+            }
 			NumberParser np = new NumberParser();
 			long error = np.Parse(errorText);
             if (np.Error)
