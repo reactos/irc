@@ -352,6 +352,11 @@ namespace TechBot.IRCLibrary
                             OnMessageReceived(new IrcMessage(message));
                         }
                     }
+                    else // 0 bytes read, the remote host has shut down the connection.
+                    {
+                        if (OnConnectionLost != null)
+                            OnConnectionLost(this, EventArgs.Empty);
+                    }
                 }
              
                 Receive();
