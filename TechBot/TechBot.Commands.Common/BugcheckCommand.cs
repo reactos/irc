@@ -43,9 +43,9 @@ namespace TechBot.Commands.Common
                 DataRow[] Found = Bugs.Select(MessageId+"=" + BugCode);
                 if (Found.Length == 1)
                     //Say(Parameters + " is " + Found[0]["SymbolicName"].ToString());
-                    Say("KeBugcheck( " + Found[0]["SymbolicName"].ToString() + " );");
+                    Say("KeBugCheck( " + Found[0]["SymbolicName"].ToString() + " );");
                 else
-                    Say("KeBugcheck( " + Parameters + " ) not found.");
+                    Say("KeBugCheck( " + Parameters + " ) not found.");
             }
         }
 
