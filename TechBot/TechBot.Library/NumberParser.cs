@@ -90,12 +90,12 @@ namespace TechBot.Library
         public bool TryParse(string s, out long result)
         {
             result = Parse(s);
-            return Error;
+            return !Error;
         }
         public bool TryParse(string s, out ulong result)
         {
             result = ParseU(s);
-            return Error;
+            return !Error;
         }
 	}
 }
