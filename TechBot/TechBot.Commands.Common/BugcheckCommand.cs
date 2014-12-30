@@ -12,6 +12,7 @@ namespace TechBot.Commands.Common
     [Command("bc", Help = "!bc <value>", Description = "Get the symbolic name of the given bugcheck code")]
     public class BugcheckCommand : Command
     {
+        NumberParser Parser;
         object Lock = new object();
         DataTable Bugs;
 
@@ -24,11 +25,12 @@ namespace TechBot.Commands.Common
             Bugs = new DataTable();
             Bugs.Columns.Add(MessageId, typeof(ulong));
             Bugs.Columns.Add(SymbolicName, typeof(string));
+            Parser = new NumberParser();
         }
         public override void ExecuteCommand()
         {
             ulong BugCode;
-            if(!TryParseHex(Parameters, out BugCode))            
+            if(!Parser.TryParse(Parameters, out BugCode))
             {
                 Say("Please provide a valid BUGCHECK value.");
             }
@@ -84,7 +86,7 @@ namespace TechBot.Commands.Common
                         case MessageId:
                             DataRow Row = Bugs.NewRow();                            
                             ulong Code = 0;
-                            if (!TryParseHex(words[1], out Code))
+                            if (!Parser.TryParse(words[1], out Code))
                                 continue;
                             Row[MessageId] = Code;
                             while ((s = sr.ReadLine()) != null)
@@ -104,26 +106,6 @@ namespace TechBot.Commands.Common
                     }
                 }
             }
-        }
-        /// <summary>
-        /// Parse a ulong/hexadecimal string to its ulong equivalent.
-        /// </summary>
-        /// <param name="s">A string representing the number to convert.</param>
-        /// <param name="result">Contains the result if successfully converted.</param>
-        /// <returns></returns>
-        static bool TryParseHex(string s, out ulong result)
-        {
-            if (string.IsNullOrEmpty(s))
-            {
-                result = 0;
-                return false;
-            }
-            s = s.Trim();
-            const string Hex = "0x";
-            if (!s.StartsWith(Hex))
-                return ulong.TryParse(s, out result);
-            s = s.Substring(2);
-            return ulong.TryParse(s, NumberStyles.HexNumber, null, out result);
         }
     }
 }

@@ -58,5 +58,44 @@ namespace TechBot.Library
 			}
 			return -1;
 		}
+        public ulong ParseU(string s)
+        {
+            try
+            {
+                Error = false;
+                bool useHex = false;
+                if (s.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    s = s.Substring(2);
+                    useHex = true;
+                }
+                if (HasSpecialHexCharacters(s))
+                    useHex = true;
+                if (useHex)
+                    return UInt64.Parse(s,
+                                       NumberStyles.HexNumber);
+                else
+                    return UInt64.Parse(s);
+            }
+            catch (FormatException)
+            {
+                Error = true;
+            }
+            catch (OverflowException)
+            {
+                Error = true;
+            }
+            return ulong.MaxValue;
+        }
+        public bool TryParse(string s, out long result)
+        {
+            result = Parse(s);
+            return Error;
+        }
+        public bool TryParse(string s, out ulong result)
+        {
+            result = ParseU(s);
+            return Error;
+        }
 	}
 }
