@@ -1647,6 +1647,65 @@
 	<Winerror text="WSA_QOS_ESDMODEOBJ" value="11029" />
 	<Winerror text="WSA_QOS_ESHAPERATEOBJ" value="11030" />
 	<Winerror text="WSA_QOS_RESERVED_PETYPE" value="11031" />
+	<Winerror text="ERROR_INTERNET_OUT_OF_HANDLES" value="12001" />
+	<Winerror text="ERROR_INTERNET_TIMEOUT" value="12002" />
+	<Winerror text="ERROR_INTERNET_EXTENDED_ERROR" value="12003" />
+	<Winerror text="ERROR_INTERNET_INTERNAL_ERROR" value="12004" />
+	<Winerror text="ERROR_INTERNET_INVALID_URL" value="12005" />
+	<Winerror text="ERROR_INTERNET_UNRECOGNIZED_SCHEME" value="12006" />
+	<Winerror text="ERROR_INTERNET_NAME_NOT_RESOLVED" value="12007" />
+	<Winerror text="ERROR_INTERNET_PROTOCOL_NOT_FOUND" value="12008" />
+	<Winerror text="ERROR_INTERNET_INVALID_OPTION" value="12009" />
+	<Winerror text="ERROR_INTERNET_BAD_OPTION_LENGTH" value="12010" />
+	<Winerror text="ERROR_INTERNET_OPTION_NOT_SETTABLE" value="12011" />
+	<Winerror text="ERROR_INTERNET_SHUTDOWN" value="12012" />
+	<Winerror text="ERROR_INTERNET_INCORRECT_USER_NAME" value="12013" />
+	<Winerror text="ERROR_INTERNET_INCORRECT_PASSWORD" value="12014" />
+	<Winerror text="ERROR_INTERNET_LOGIN_FAILURE" value="12015" />
+	<Winerror text="ERROR_INTERNET_INVALID_OPERATION" value="12016" />
+	<Winerror text="ERROR_INTERNET_OPERATION_CANCELLED" value="12017" />
+	<Winerror text="ERROR_INTERNET_INCORRECT_HANDLE_TYPE" value="12018" />
+	<Winerror text="ERROR_INTERNET_INCORRECT_HANDLE_STATE" value="12019" />
+	<Winerror text="ERROR_INTERNET_NOT_PROXY_REQUEST" value="12020" />
+	<Winerror text="ERROR_INTERNET_REGISTRY_VALUE_NOT_FOUND" value="12021" />
+	<Winerror text="ERROR_INTERNET_BAD_REGISTRY_PARAMETER" value="12022" />
+	<Winerror text="ERROR_INTERNET_NO_DIRECT_ACCESS" value="12023" />
+	<Winerror text="ERROR_INTERNET_NO_CONTEXT" value="12024" />
+	<Winerror text="ERROR_INTERNET_NO_CALLBACK" value="12025" />
+	<Winerror text="ERROR_INTERNET_REQUEST_PENDING" value="12026" />
+	<Winerror text="ERROR_INTERNET_INCORRECT_FORMAT" value="12027" />
+	<Winerror text="ERROR_INTERNET_ITEM_NOT_FOUND" value="12028" />
+	<Winerror text="ERROR_INTERNET_CANNOT_CONNECT" value="12029" />
+	<Winerror text="ERROR_INTERNET_CONNECTION_ABORTED" value="12030" />
+	<Winerror text="ERROR_INTERNET_CONNECTION_RESET" value="12031" />
+	<Winerror text="ERROR_INTERNET_FORCE_RETRY" value="12032" />
+	<Winerror text="ERROR_INTERNET_INVALID_PROXY_REQUEST" value="12033" />
+	<Winerror text="ERROR_INTERNET_HANDLE_EXISTS" value="12036" />
+	<Winerror text="ERROR_INTERNET_SEC_CERT_DATE_INVALID" value="12037" />
+	<Winerror text="ERROR_INTERNET_SEC_CERT_CN_INVALID" value="12038" />
+	<Winerror text="ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR" value="12039" />
+	<Winerror text="ERROR_INTERNET_HTTPS_TO_HTTP_ON_REDIR" value="12040" />
+	<Winerror text="ERROR_INTERNET_MIXED_SECURITY" value="12041" />
+	<Winerror text="ERROR_INTERNET_CHG_POST_IS_NON_SECURE" value="12042" />
+	<Winerror text="ERROR_INTERNET_POST_IS_NON_SECURE" value="12043" />
+	<Winerror text="ERROR_FTP_TRANSFER_IN_PROGRESS" value="12110" />
+	<Winerror text="ERROR_FTP_DROPPED" value="12111" />
+	<Winerror text="ERROR_GOPHER_PROTOCOL_ERROR" value="12130" />
+	<Winerror text="ERROR_GOPHER_NOT_FILE" value="12131" />
+	<Winerror text="ERROR_GOPHER_DATA_ERROR" value="12132" />
+	<Winerror text="ERROR_GOPHER_END_OF_DATA" value="12133" />
+	<Winerror text="ERROR_GOPHER_INVALID_LOCATOR" value="12134" />
+	<Winerror text="ERROR_GOPHER_INCORRECT_LOCATOR_TYPE" value="12135" />
+	<Winerror text="ERROR_GOPHER_NOT_GOPHER_PLUS" value="12136" />
+	<Winerror text="ERROR_GOPHER_ATTRIBUTE_NOT_FOUND" value="12137" />
+	<Winerror text="ERROR_GOPHER_UNKNOWN_LOCATOR" value="12138" />
+	<Winerror text="ERROR_HTTP_HEADER_NOT_FOUND" value="12150" />
+	<Winerror text="ERROR_HTTP_DOWNLEVEL_SERVER" value="12151" />
+	<Winerror text="ERROR_HTTP_INVALID_SERVER_RESPONSE" value="12152" />
+	<Winerror text="ERROR_HTTP_INVALID_HEADER" value="12153" />
+	<Winerror text="ERROR_HTTP_INVALID_QUERY_REQUEST" value="12154" />
+	<Winerror text="ERROR_HTTP_HEADER_ALREADY_EXISTS" value="12155" />
+	<Winerror text="ERROR_HTTP_REDIRECT_FAILED" value="12156" />
 	<Winerror text="ERROR_IPSEC_QM_POLICY_EXISTS" value="13000" />
 	<Winerror text="ERROR_IPSEC_QM_POLICY_NOT_FOUND" value="13001" />
 	<Winerror text="ERROR_IPSEC_QM_POLICY_IN_USE" value="13002" />
