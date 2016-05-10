@@ -18,7 +18,7 @@
       <Value Profile="(Default)">svn://svn.reactos.org/reactos/trunk</Value>
     </Setting>
     <Setting Name="Bugcodes" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://svn.reactos.org/reactos/trunk/reactos/include/reactos/mc/bugcodes.mc</Value>
+      <Value Profile="(Default)">https://svn.reactos.org/reactos/trunk/reactos/sdk/include/reactos/mc/bugcodes.mc</Value>
     </Setting>
   </Settings>
 </SettingsFile>
