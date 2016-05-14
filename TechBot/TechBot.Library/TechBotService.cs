@@ -66,6 +66,7 @@ namespace TechBot.Library
 			}
 			else
 				commandName = message.Trim();
+            commandName = commandName.ToLower();
 
             foreach (CommandBuilder command in Commands)
             {
