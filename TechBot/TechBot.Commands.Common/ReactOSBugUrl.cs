@@ -15,7 +15,7 @@ namespace TechBot.Commands.Common
 
         protected override Uri BugUrl
         {
-            get { return new Uri("http://jira.reactos.org/browse/{0}"); }
+            get { return new Uri("https://jira.reactos.org/browse/{0}"); }
         }
     }
 }
