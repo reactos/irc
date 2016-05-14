@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" ?>
+<?xml version="1.0" ?>
 <NtstatusList>
 	<Ntstatus text="STATUS_SUCCESS" value="00000000"></Ntstatus>
 	<Ntstatus text="STATUS_WAIT_0" value="00000000"></Ntstatus>
@@ -143,6 +143,7 @@
 	<Ntstatus text="STATUS_MP_PROCESSOR_MISMATCH" value="40000029"></Ntstatus>
 	<Ntstatus text="STATUS_HIBERNATED" value="4000002A"></Ntstatus>
 	<Ntstatus text="STATUS_RESUME_HIBERNATION" value="4000002B"></Ntstatus>
+	<Ntstatus text="MS_VC_EXCEPTION" value="406D1388"></Ntstatus>
 	<Ntstatus text="STATUS_GUARD_PAGE_VIOLATION" value="80000001"></Ntstatus>
 	<Ntstatus text="STATUS_DATATYPE_MISALIGNMENT" value="80000002"></Ntstatus>
 	<Ntstatus text="STATUS_BREAKPOINT" value="80000003"></Ntstatus>

@@ -49,18 +49,34 @@ namespace TechBot.Commands.Common
 
 		public string GetWinerrorDescription(long winerror)
 		{
-			XmlElement root = base.m_XmlDocument.DocumentElement;
+            Exception ex = null;
+            // Get a text description for the error using host's error messages.
+            try
+            {
+#warning FIXME : should display exceptions in English regardless of the host machine language.
+                //System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+                ex = new System.ComponentModel.Win32Exception((int)winerror);
+            }
+            catch (Exception)
+            { }
+
+            XmlElement root = base.m_XmlDocument.DocumentElement;
 			XmlNode node = root.SelectSingleNode(String.Format("Winerror[@value='{0}']",
                                                                winerror.ToString()));
-			if (node != null)
-			{
-				XmlAttribute text = node.Attributes["text"];
-				if (text == null)
-					throw new Exception("Node has no text attribute.");
-				return text.Value;
-			}
-			else
-				return null;
+            if (node != null)
+            {
+                XmlAttribute text = node.Attributes["text"];
+                if (text == null)
+                    throw new Exception("Node has no text attribute.");
+                if (ex != null)
+                    return text.Value + ": " + ex.Message;
+                else
+                    return text.Value;
+            }
+            else if (ex != null)
+                return ex.Message;
+            else
+                return null;
 		}
 	}
 }

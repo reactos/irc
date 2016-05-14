@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" ?>
+<?xml version="1.0" ?>
 <HresultList>
 	<Hresult text="S_OK" value="00000000" />
 	<Hresult text="S_FALSE" value="00000001" />
@@ -74,6 +74,7 @@
 	<Hresult text="E_FAIL" value="80000008" />
 	<Hresult text="E_ACCESSDENIED" value="80000009" />
 	<Hresult text="E_PENDING" value="8000000A" />
+	<Hresult text="EXCEPTION_WINE_STUB" value="80000100" />
 	<Hresult text="E_NOTIMPL" value="80004001" />
 	<Hresult text="E_NOINTERFACE" value="80004002" />
 	<Hresult text="E_POINTER" value="80004003" />
