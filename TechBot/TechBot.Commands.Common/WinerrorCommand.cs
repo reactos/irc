@@ -2,6 +2,8 @@ using System;
 using System.Xml;
 
 using TechBot.Library;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace TechBot.Commands.Common
 {
@@ -49,16 +51,13 @@ namespace TechBot.Commands.Common
 
 		public string GetWinerrorDescription(long winerror)
 		{
-            Exception ex = null;
-            // Get a text description for the error using host's error messages.
+            // Try and get an english description of the error from the system messages.
+            StringBuilder errorMsg = new StringBuilder(450); // longest IRC message = 512 bytes
             try
             {
-#warning FIXME : should display exceptions in English regardless of the host machine language.
-                //System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                ex = new System.ComponentModel.Win32Exception((int)winerror);
+                NativeMethods.FormatMessage(NativeMethods.FORMAT_MESSAGE_FROM_SYSTEM, IntPtr.Zero, (uint)winerror, NativeMethods.EnglishCI, errorMsg, errorMsg.Capacity, null);
             }
-            catch (Exception)
-            { }
+            finally { }
 
             XmlElement root = base.m_XmlDocument.DocumentElement;
 			XmlNode node = root.SelectSingleNode(String.Format("Winerror[@value='{0}']",
@@ -68,15 +67,21 @@ namespace TechBot.Commands.Common
                 XmlAttribute text = node.Attributes["text"];
                 if (text == null)
                     throw new Exception("Node has no text attribute.");
-                if (ex != null)
-                    return text.Value + ": " + ex.Message;
+                if (errorMsg.Length > 0)
+                    return text.Value + ": " + errorMsg.ToString();
                 else
                     return text.Value;
             }
-            else if (ex != null)
-                return ex.Message;
             else
                 return null;
 		}
 	}
+    static partial class NativeMethods
+    {        
+        [DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true, BestFitMapping = true)]
+        public static extern int FormatMessage(int dwFlags, IntPtr source, uint dwMessageId,
+            int dwLanguageId, StringBuilder lpBuffer, int nSize, IntPtr[] arguments);
+        internal const int FORMAT_MESSAGE_FROM_SYSTEM = 0x1000;
+        internal static int EnglishCI = 0x409; // new CultureInfo("en-US").LCID :-)
+    }
 }

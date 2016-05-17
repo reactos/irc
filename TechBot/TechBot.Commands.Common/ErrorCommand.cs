@@ -175,15 +175,15 @@ namespace TechBot.Commands.Common
             {
                 string description = (string)descriptions[0];
                 Say("{0} is {1}.",
-                                                      Parameters,
-                                                      description);
+                    Parameters,
+                    description.Trim());
             }
             else
             {
                 Say("{0} could be:", Parameters);
 
                 foreach (string description in descriptions)
-                    Say("\t{0}", description);
+                    Say("\t{0}", description.Trim());
             }
 		}
 	}
